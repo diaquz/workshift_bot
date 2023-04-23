@@ -1,0 +1,8 @@
+**/__pycache__/
+app/config.py
+venv/
+node_modules/
+
+*.pyc
+config.py
+workshift.db
