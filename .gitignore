@@ -2,6 +2,7 @@
 app/config.py
 venv/
 node_modules/
+app/frontend/build
 
 *.pyc
 config.py
