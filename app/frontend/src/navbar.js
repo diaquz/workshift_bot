@@ -25,8 +25,8 @@ export default function Navigation() {
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-                <Navbar.Link> График </Navbar.Link>
-                <Navbar.Link> Обмен </Navbar.Link>
+                <Navbar.Link href={'/'}> График </Navbar.Link>
+                <Navbar.Link href={'/offers'}> Обмен </Navbar.Link>
                 <Navbar.Link href="https://t.me/NNtksg_bot"> Телеграм бот </Navbar.Link>
                 <Navbar.Link> FAQ </Navbar.Link>
                 <Navbar.Link> Профиль </Navbar.Link>

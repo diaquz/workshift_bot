@@ -7,7 +7,7 @@ import {
   Progress
 } from "flowbite-react";
  
-import CustomDatepicker from './datepicker'
+import CustomDatepicker from './components/datepicker'
 
 function Item({time, title, body})
 {
@@ -44,7 +44,7 @@ function Duration({start, end}) {
   );
 }
 
-export default function Calendar()
+export default function ScheludeScreen()
 {
   return (
     <Card className="m-10 min-h-screen">

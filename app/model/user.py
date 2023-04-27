@@ -22,6 +22,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     telegram_id = Column(Integer, nullable=True)
     name = Column(String(256), nullable=False)
+    picture = Column(String(256), nullable=True)
 
     level = Column(Enum(Qualification), nullable=False)
     privilage = Column(Enum(PrivilegeLevel), nullable=False)

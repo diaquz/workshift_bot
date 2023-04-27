@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import './tailwind.css';
+import '../tailwind.css'
 
 import {HiArrowLeft, HiArrowRight} from 'react-icons/hi2'
 import Datepicker from "tailwind-datepicker-react"

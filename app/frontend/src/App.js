@@ -1,18 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
 
-import {Footer} from 'flowbite-react'
+import React from 'react';
+import {Footer} from 'flowbite-react';
 
-import CustomDatepicker from './datepicker'
 import Navigation from './navbar';
-import Calendar from './calendar';
+import ScheludeScreen from './schelude';
+import OffersScreen from './offers';
+// import ErrorScreen from './error-screen';
+
+import {
+  createBrowserRouter,
+  RouterProvider
+} from 'react-router-dom';
+
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <ScheludeScreen />
+  },
+  {
+    path: '/offers',
+    element: <OffersScreen />
+  }
+]);
 
 function App() {
 
   return (
     <div className="App bg-slate-50">
       <Navigation/>
-      <Calendar />
+
+      <React.StrictMode>
+        <RouterProvider router={router}/>
+      </React.StrictMode>
+
       <Footer container={true}>
         <Footer.Copyright by="Андрей Федин" year={2023}/>
         <Footer.LinkGroup>
