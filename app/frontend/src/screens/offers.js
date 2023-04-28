@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import './tailwind.css';
+// import './tailwind.css';
 import {
   Timeline,
   Button,

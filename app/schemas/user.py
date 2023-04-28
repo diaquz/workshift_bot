@@ -1,9 +1,24 @@
 from pydantic import BaseModel
+from typing import Optional
 from app.model.user import Qualification, PrivilegeLevel
 
-class User(BaseModel):
-    id: int
-    telegram_id: int
+class UserBase(BaseModel):
+    telegram_id: Optional[int]
     name: str
-    username: str
     level: Qualification
+    privilage: PrivilegeLevel
+
+class UserCreate(UserBase):
+    picture: Optional[str]
+
+class UserUpdate(UserBase):
+    ...
+
+class UserInDbBase(UserBase):
+    id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+class User(UserInDbBase):
+    pass

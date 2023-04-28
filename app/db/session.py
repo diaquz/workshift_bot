@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from config import SQLALCHEMY_DATABASE_URI
+from app.core.config import settings
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URI,
+    settings.SQLALCHEMY_DATABASE_URI,
     connect_args={ "check_same_thread": False }
 )
 

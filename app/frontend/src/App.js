@@ -1,11 +1,15 @@
 import './App.css';
+import './tailwind.css';
 
 import React from 'react';
-import {Footer} from 'flowbite-react';
 
-import Navigation from './navbar';
-import ScheludeScreen from './schelude';
-import OffersScreen from './offers';
+import CustomFooter from './components/Footer'
+import Navigation from './components/Navigation'
+
+import UserSchedule from './screens/UserSchedule';
+import OffersScreen from './screens/offers';
+
+
 // import ErrorScreen from './error-screen';
 
 import {
@@ -17,7 +21,7 @@ import {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ScheludeScreen />
+    element: <UserSchedule />
   },
   {
     path: '/offers',
@@ -26,7 +30,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
   return (
     <div className="App bg-slate-50">
       <Navigation/>
@@ -35,15 +38,7 @@ function App() {
         <RouterProvider router={router}/>
       </React.StrictMode>
 
-      <Footer container={true}>
-        <Footer.Copyright by="Андрей Федин" year={2023}/>
-        <Footer.LinkGroup>
-          <Footer.Link>About</Footer.Link>
-          <Footer.Link>Privacy Policy</Footer.Link>
-          <Footer.Link>Licensing</Footer.Link>
-          <Footer.Link>Contact</Footer.Link>
-        </Footer.LinkGroup>
-      </Footer>
+      <CustomFooter/>
     </div>
   );
 }

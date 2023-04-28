@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-import '../tailwind.css'
+import { useState, useEffect, React } from "react";
+// import '../tailwind.css'
 
 import {HiArrowLeft, HiArrowRight} from 'react-icons/hi2'
 import Datepicker from "tailwind-datepicker-react"
 
-export default function CustomDatepicker({handleChange, defaultShow, input})
-{
+const CustomDatepicker = ({handleChange, defaultShow, input, date = new Date()}) => {
     const options = {
         title: "Выбор даты",
         autoHide: false,
@@ -29,22 +28,20 @@ export default function CustomDatepicker({handleChange, defaultShow, input})
             next: () => <HiArrowRight/>
         },
         datepickerClassNames: "top-40",
-        defaultDate: new Date(),
+        defaultDate: date,
         language: "ru",
     };
 
     const [show, setShow] = useState(defaultShow);
-    // const [selectedDate, setSelectedDate] = useState(new Date())
 
     const handleClose = (state) => {
         if(!defaultShow) setShow(state);
     }
 
     return (
-        <div>
         <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose}>
-    
         </Datepicker>
-        </div>
     );
 }
+
+export default CustomDatepicker;

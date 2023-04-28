@@ -1,20 +1,6 @@
-import { useState, useEffect } from "react";
-import './tailwind.css';
-// import {
-//   Navbar,
-//   MobileNav,
-//   Typography,
-//   Button,
-//   IconButton,
-// } from "@material-tailwind/react";
- 
-import {
-    Navbar,
-    
-} from "flowbite-react"
+import { Navbar } from "flowbite-react"
 
-
-export default function Navigation() {
+const Navigation = () => {
 
     return (
         <Navbar fluid={true} rounded={true} border={true}>
@@ -34,3 +20,5 @@ export default function Navigation() {
         </Navbar>
     );
 }
+
+export default Navigation;
