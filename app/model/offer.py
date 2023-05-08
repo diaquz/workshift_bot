@@ -4,10 +4,15 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base
 
 class Offer(Base):
-    __tablename__ = 'workshift'
+    __tablename__ = 'offer'
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
-    workshift_id = Column(Integer, nullable=False)
-    publisher_id = Column(Integer, nullable=False)
 
+    workshift_id = Column(Integer, ForeignKey("workshift.id", ondelete="CASCADE"), nullable=False)
+    publisher_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+
+    workshift = relationship("Workshift", back_populates="offer")
+    user = relationship("User", back_populates="offers")
+
+    answers = relationship("Answer", cascade="all,delete", back_populates="offer", uselist=True)
     

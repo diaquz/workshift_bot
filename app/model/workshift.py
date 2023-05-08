@@ -9,8 +9,10 @@ class Workshift(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User", back_populates="workshifts")
 
     start_time = Column(DateTime, index=True, default=datetime.utcnow, nullable=False)
     duration = Column(Integer, nullable=False) #maybe timedelta or smt
+
+    offer = relationship("Offer", back_populates="workshift", cascade="all, delete")

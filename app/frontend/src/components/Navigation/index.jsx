@@ -11,6 +11,7 @@ const Navigation = () => {
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
+                <Navbar.Link href={'/moderation'}> Модерация </Navbar.Link>
                 <Navbar.Link href={'/'}> График </Navbar.Link>
                 <Navbar.Link href={'/offers'}> Обмен </Navbar.Link>
                 <Navbar.Link href="https://t.me/NNtksg_bot"> Телеграм бот </Navbar.Link>

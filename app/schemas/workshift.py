@@ -15,7 +15,7 @@ class WorkshiftUpdate(WorkshiftBase):
     ...
 
 class WorkshiftInDbBase(WorkshiftBase):
-    id: int
+    id: Optional[int]
 
     class Config:
         orm_mode = True

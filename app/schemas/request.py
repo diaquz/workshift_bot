@@ -1,9 +1,24 @@
 from pydantic import BaseModel
+from typing import Optional
+
 from app.model.user import Qualification
 
-class Request(BaseModel):
-    id: int
-    telegram_id: int
+class RequestBase(BaseModel):
     name: str
-    username: str
+    telegram_id: int
     level: Qualification
+
+class RequestCreate(RequestBase):
+    ...
+
+class RequestUpdate(RequestBase):
+    ...
+
+class RequestInDbBase(RequestBase):
+    id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+class Request(RequestInDbBase):
+    pass

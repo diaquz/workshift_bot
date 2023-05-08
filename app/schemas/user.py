@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Sequence
 from app.model.user import Qualification, PrivilegeLevel
 
 class UserBase(BaseModel):
@@ -22,3 +22,7 @@ class UserInDbBase(UserBase):
 
 class User(UserInDbBase):
     pass
+
+class UserList(BaseModel):
+    result: Sequence[User]
+    

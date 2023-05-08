@@ -5,24 +5,24 @@
 # from app import routes
 
 from fastapi import FastAPI, APIRouter
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.api import api_router
-from pathlib import Path
-
-
+from app.core.config import settings
 
 app = FastAPI(
     title="Recipe API", openapi_url="/openapi.json"
 )
 
-# root_router = APIRouter()
+if settings.BACKEND_CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origin_regex=settings.BACKEND_CORS_ORIGIN_REGEX,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-# @root_router.get("/", status_code=200)
-# def root() -> dict:
-#     return {"msg": "Hello, World!"}
-
-
-# app.include_router(root_router)
 app.include_router(api_router)
 
 

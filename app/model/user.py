@@ -13,7 +13,10 @@ class PrivilegeLevel(IntEnum):
 class Qualification(IntEnum):
     Easy = 0
     Medium = 1
-    Master = 2
+    Hard = 2
+    Master = 3
+
+# class Permission(IntEnum):
 
 
 class User(Base):
@@ -26,4 +29,7 @@ class User(Base):
 
     level = Column(Enum(Qualification), nullable=False)
     privilage = Column(Enum(PrivilegeLevel), nullable=False)
-    workshifts = relationship("Workshift", cascade="all,delete-orphan", back_populates="user", uselist=True)
+
+    workshifts = relationship("Workshift", cascade="all,delete", back_populates="user", uselist=True)
+    offers = relationship("Offer", cascade="all,delete", back_populates="user", uselist=True)
+    answers = relationship("Answer", cascade="all,delete", back_populates="user", uselist=True)
