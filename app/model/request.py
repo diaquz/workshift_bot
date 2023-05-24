@@ -10,6 +10,7 @@ class RegistrationRequest(Base):
     id = Column(Integer, primary_key=True, index=True)
     telegram_id = Column(Integer, nullable=False)
     name = Column(String(256), nullable=False)
+    picture = Column(String(256), nullable=True)
     # username = Column(String(256), nullable=False)
 
     level = Column(Enum(Qualification), nullable=False)

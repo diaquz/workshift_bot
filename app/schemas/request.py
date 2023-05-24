@@ -6,6 +6,7 @@ from app.model.user import Qualification
 class RequestBase(BaseModel):
     name: str
     telegram_id: int
+    picture: Optional[str]
     level: Qualification
 
 class RequestCreate(RequestBase):
@@ -22,3 +23,7 @@ class RequestInDbBase(RequestBase):
 
 class Request(RequestInDbBase):
     pass
+
+class RequestList(BaseModel):
+    result: list[Request]
+    

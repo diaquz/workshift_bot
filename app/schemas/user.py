@@ -6,6 +6,7 @@ class UserBase(BaseModel):
     telegram_id: Optional[int]
     name: str
     level: Qualification
+    picture: Optional[str]
     privilage: PrivilegeLevel
 
 class UserCreate(UserBase):

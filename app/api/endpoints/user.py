@@ -43,7 +43,7 @@ def delete_user(
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ):
-    if repository.user.hasPermission(user):
+    if repository.user.hasPermission(user): # type: ignore
         obj = repository.user.get(db, user_id)
 
         if obj is None:

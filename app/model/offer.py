@@ -8,10 +8,10 @@ class Offer(Base):
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
 
-    workshift_id = Column(Integer, ForeignKey("workshift.id", ondelete="CASCADE"), nullable=False)
+    workshift_id = Column(Integer, ForeignKey("event.id", ondelete="CASCADE"), nullable=False)
     publisher_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
-    workshift = relationship("Workshift", back_populates="offer")
+    workshift = relationship("Event", back_populates="offer")
     user = relationship("User", back_populates="offers")
 
     answers = relationship("Answer", cascade="all,delete", back_populates="offer", uselist=True)

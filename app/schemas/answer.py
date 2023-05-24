@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
-from app.model.user import Qualification, PrivilegeLevel
+from typing import Optional, Sequence
+from app.schemas import User
 
 class AnswerBase(BaseModel):
     offer_id: int
@@ -21,3 +21,9 @@ class AnswerInDbBase(AnswerBase):
 
 class Answer(AnswerInDbBase):
     pass
+
+class AnswerDetail(Answer):
+    user: User
+
+class AnswerDetailList(BaseModel):
+    result: Sequence[AnswerDetail]

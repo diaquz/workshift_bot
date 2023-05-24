@@ -4,7 +4,7 @@ from typing import Optional
 
 from app.api import deps
 from app.schemas.telegram import TelegramAuthRequest
-from app.schemas.request import RequestCreate
+from app.schemas.request import RequestCreate, RequestList
 from app import schemas
 
 from app.model.user import PrivilegeLevel
@@ -50,7 +50,9 @@ def register(*,
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Already registered")
         else:
             data.telegram_id = tg_id
+            data.picture = token.photo_url
             result = repository.request.create(db, obj_in=data)
+            
             return {
                 'result': result
             }
@@ -58,12 +60,12 @@ def register(*,
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect authentication token")
 
 
-@router.get("/requests", status_code=200)
+@router.get("/requests", status_code=200, response_model=RequestList)
 def fetch_requests(
     offset: Optional[int] = 0,
     limit: Optional[int] = 10,
     db: Session = Depends(deps.get_db)
-):
+) -> dict:
     requests = repository.request.get_many(db, offset=offset, limit=limit) #type: ignore
 
     return {
@@ -89,5 +91,19 @@ def accept_request(
         repository.request.remove(db, id = request_id)
 
         return new_user
+    
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Request does not exist")
+
+
+@router.post("/requests/dismiss", status_code=status.HTTP_200_OK, response_model=schemas.User)
+def dismiss_request(
+    request_id: int,
+    db: Session = Depends(deps.get_db)
+):
+    request = repository.request.get(db, request_id)
+    if request is not None:
+        repository.request.remove(db, id = request_id)
+
+        return request
     
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Request does not exist")

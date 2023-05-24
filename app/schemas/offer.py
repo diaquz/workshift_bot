@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, Sequence
-from app.schemas import User, Workshift
+from app.schemas import User, Event
+from app.schemas.answer import AnswerDetail
 
 class OfferBase(BaseModel):
     workshift_id: int
@@ -23,8 +24,14 @@ class Offer(OfferInDbBase):
 
 class OfferDetails(Offer):
     user: User
-    workshift: Workshift
+    workshift: Event
 
 class OffersDetailsList(BaseModel):
     result: Sequence[OfferDetails]
+    
+class OfferWithAnswers(Offer):
+    answers: Sequence[AnswerDetail]
+
+class OfferWithAnswersList(BaseModel):
+    result: Sequence[OfferWithAnswers]
     

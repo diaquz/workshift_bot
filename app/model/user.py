@@ -16,6 +16,13 @@ class Qualification(IntEnum):
     Hard = 2
     Master = 3
 
+
+def to_qualification(value):
+    try:
+        return Qualification(value)
+    except Exception as e:
+        return Qualification.Easy
+
 # class Permission(IntEnum):
 
 
@@ -30,6 +37,7 @@ class User(Base):
     level = Column(Enum(Qualification), nullable=False)
     privilage = Column(Enum(PrivilegeLevel), nullable=False)
 
-    workshifts = relationship("Workshift", cascade="all,delete", back_populates="user", uselist=True)
+    workshifts = relationship("Event", cascade="all,delete", back_populates="user", uselist=True)
     offers = relationship("Offer", cascade="all,delete", back_populates="user", uselist=True)
     answers = relationship("Answer", cascade="all,delete", back_populates="user", uselist=True)
+    feedbacks = relationship("Feedback", cascade="all,delete", back_populates="user", uselist=True)
