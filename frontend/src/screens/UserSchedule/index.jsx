@@ -4,6 +4,7 @@ import { Card } from "flowbite-react";
 import { Time } from "../../constants";
 import * as moment from 'moment';
 
+import MessageToast from "../../components/BaseToast";
 import { EventsList } from "../../components/UserEventsList";
 import DatePicker from "../../components/DatePicker";
 
@@ -16,6 +17,8 @@ const UserSchedule = () => {
 
     const [date, setDate] = useState(moment());
     const [events, setEvents] = useState([]);
+    const [toasts, setToasts] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +32,8 @@ const UserSchedule = () => {
     const fetchSchedule = (date) => {
         client.fetchUserEvents(date).then((data) => {
             setEvents(data?.result);
+        }).catch((data) => { 
+            setToasts(["Ошибка"]);
         });
     };
 
@@ -41,7 +46,9 @@ const UserSchedule = () => {
 
     const publishEvent = (id) => {
         client.publishOffer(id).then((data) => {
-
+            setToasts(["Предложение обмена создано"])
+        }).catch((data) => { 
+            setToasts(["Ошибка"]);
         });
     };
 
@@ -49,6 +56,7 @@ const UserSchedule = () => {
     return (
     <>
         <Card className="m-5 lg:m-10 min-h-screen">
+            {toasts && toasts.map((toast) => <MessageToast message={toast} onClose={() => setToasts([])}/>)}
             <div className="container flex flex-col-reverse md:flex-row min-w-full">
                 <div className="md:basis-3/4">
                     <EventsList events={events} publish={publishEvent}/>

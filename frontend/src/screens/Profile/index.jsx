@@ -8,18 +8,25 @@ const client = new FastAPIClient();
 
 const ProfileScreen = () => {
     const navigate = useNavigate();
+    const [form, setForm] = useState(false);
 
     useEffect(() => {
         if(!client.checkAuth()) navigate('/login');
     }, [])
     const user = client.currentUser();
 
+    const logout = () => {
+        client.logout();
+        navigate('/login')
+    };
+
+
     return (
     <>
         <Card className="m-5 lg:m-10">
-            <div className="flex flex-col m-10 justify-start">
+            <div className="flex flex-col m-10 justify-center space-y-5">
 
-                <div className="flex items-center space-x-10">
+                {user && <div className="flex items-center space-x-10 justify-center">
                     <div className="shrink-0">
                         <img className="h-16 w-16 rounded-full" src={user.picture} alt="User image"/>
                     </div>
@@ -31,10 +38,10 @@ const ProfileScreen = () => {
                             {(user.privilage == 2) ? (<Badge color="purple">Администратор</Badge>) : "" }
                         </div>
                     </div>
-                </div>
+                </div>}
                 
-                Связь с модераторами
-                Выход
+                <a className="underline hover:scale-105" onClick={() => setForm(true)} > Связь с модераторами </a>
+                <a className="underline hover:scale-105" onClick={() => logout()}>Выход </a>
 
             </div>
         </Card>

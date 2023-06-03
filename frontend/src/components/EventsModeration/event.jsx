@@ -26,7 +26,7 @@ const Event = ({event, onSelect, onDelete}) => {
                         </div>
                         <div className="flex flex-row">
                             <IconButton icon={<HiOutlinePencil />} onClick={() => { onSelect(event) }}/>
-                            <IconButton icon={<HiOutlineTrash />} onClick={() => { onDelete(event) }}/>
+                            <IconButton icon={<HiOutlineTrash />} onClick={() => { onDelete(event.id) }}/>
                         </div>
                     </div>
                     <Duration start={event.start_time} end={event.end_time}/>

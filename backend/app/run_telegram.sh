@@ -1,0 +1,1 @@
+python ./app/telegram/main.py

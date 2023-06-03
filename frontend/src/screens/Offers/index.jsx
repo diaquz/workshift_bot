@@ -14,7 +14,7 @@ const client = new FastAPIClient(config)
 const OffersScreen = () => {
 
     const [offers, setOffers] = useState([]);
-    const [answers, setAnswer] = useState([]);
+    const [answers, setAnswers] = useState([]);
     const [events, setEvents] = useState([]);
     const [myOffers, setMyOffers] = useState([]);
     const [toasts, setToasts] = useState([]);
@@ -27,22 +27,24 @@ const OffersScreen = () => {
 
     // useEffect(() => setToasts([]), [toasts]);
 
-    useEffect(() => fetchAviableOffers(), []);
+    useEffect(() => fetchAviableOffers(0), []);
 
-    const fetchAviableOffers = () => {
-        client.fetchAviableOffers().then((data) => {
+    const fetchAviableOffers = (offset) => {
+        client.fetchAviableOffers(offset).then((data) => {
             setOffers(data?.result);
-        });
+        }).catch((data) => { setToasts(["Ошибка"])});
     };
 
     const fetchUserOffers = () => {
         client.fetchUserOffers().then((data) => {
             setMyOffers(data?.result)
-        });
+        }).catch((data) => { setToasts(["Ошибка"])});
     };
 
     const fetchUserAnswers = () => {
-        
+        client.fetchUserAnswers().then((data) => {
+            setAnswers(data?.result)
+        }).catch((data) => { setToasts(["Ошибка"])});
     };
 
     const fetchEvents = (date) => {
@@ -50,7 +52,7 @@ const OffersScreen = () => {
             .then((data) => { setEvents(data?.result) })
             .catch((data) => { 
                 setToasts(["Ошибка"]);
-                return [];
+                // return [];
             })
     } 
 
@@ -85,14 +87,14 @@ const OffersScreen = () => {
         <Card className="m-5 lg:m-10 min-h-screen">
             {toasts && toasts.map((toast) => <MessageToast message={toast} onClose={() => setToasts([])}/>)}
             <Tabs.Group className="container place-content-center mx-auto">
+                <Tabs.Item title="Доступные обмены" active={true}>
+                    <AviableOffersList offers={offers} events={events} accept={acceptOffer} fetchOffers={fetchAviableOffers} fetchEvents={fetchEvents}/>
+                </Tabs.Item>
                 <Tabs.Item title="Мои предложения">
                     <UserOffersList offers={myOffers} fetch={fetchUserOffers} removeOffer={removeOffer} accept={acceptAnswer} decline={declineAnswer}/>
                 </Tabs.Item>
                 <Tabs.Item title="Мои ответы">
 
-                </Tabs.Item>
-                <Tabs.Item title="Доступные обмены" active={true}>
-                    <AviableOffersList offers={offers} events={events} accept={acceptOffer} fetchEvents={fetchEvents}/>
                 </Tabs.Item>
             </Tabs.Group>
         </Card>

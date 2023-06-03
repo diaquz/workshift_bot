@@ -31,7 +31,6 @@ const EventModal = ({date, updateDate, show, setShow, openUserSelect, submit}) =
         submit(date.user, date.event, data)
     };
 
-    // alert(JSON.stringify(date))
 
     return (
     <Modal show={show} onClose={() => setShow(false)}>

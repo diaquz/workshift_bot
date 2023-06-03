@@ -131,8 +131,14 @@ class FastAPIClient {
         );
     }
 
-    fetchAviableOffers() {
-        return this.apiClient.get('/offer/?offset=0&limit=10').then(
+    deleteEvent(id) {
+        return this.apiClient.post(`/event/delete?id=${id}`).then(
+            ({data}) => { return data; }
+        )
+    }
+
+    fetchAviableOffers(offset) {
+        return this.apiClient.get(`/offer/?offset=${offset}&limit=10`).then(
             ({data}) => { return data; }
         );
     }
@@ -153,6 +159,12 @@ class FastAPIClient {
     deleteOffer(id) {
         return this.apiClient.post(`offer/delete?id=${id}`).then(
             ({data}) => { return data }
+        );
+    }
+
+    fetchUserAnswers() {
+        return this.apiClient.get('offer/answer/me').then(
+            ({data}) => { return data; }
         );
     }
 
@@ -188,6 +200,22 @@ class FastAPIClient {
 
     deleteAnswer(id) {
         return this.apiClient.post(`/offer/answer/delete?id=${id}`).then(
+            ({data}) => { return data; }
+        );
+    }
+
+    fetchFeedback() {
+        return this.apiClient.get('/feedback/').then(
+            ({data}) => { return data; }
+        );
+    }
+
+    createFeedback(data) {
+
+    }
+
+    deleteFeedback(id) {
+        return this.apiClient.post(`/feedback/delete?id=${id}`).then(
             ({data}) => { return data; }
         );
     }

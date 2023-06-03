@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/app:/app
+      - ./backend/assets:/assets
+    environment:
+      - DATABASE_URL=sqlite:///workshift.db
+      - BACKEND_CORS_ORIGINS=["http://localhost:80","http://workshift.local"]
+
+volumes:
+  app-db-data:

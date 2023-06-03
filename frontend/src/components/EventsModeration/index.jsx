@@ -62,6 +62,9 @@ const EventsModeration = ({events, fetch, users, fetchUsers, submit, onDelete}) 
             start_time: (newEvent ? Time.time(newEvent.start_time) : "8:00"),
             end_time: (newEvent ? Time.time(newEvent.end_time) : "17:00")
         });  
+        const inp = document.querySelector(`#text-input-title-input`);
+        if(newEvent != null)
+            inp.value = newEvent.title
     };
 
     let updateData = (field, value) => {
@@ -74,8 +77,9 @@ const EventsModeration = ({events, fetch, users, fetchUsers, submit, onDelete}) 
     const onSubmit = () => {
         const start = moment(`${date.start}-${date.start_time}`, 'DD/MM/YYYY-hh:mm')
         const end = moment(`${date.end}-${date.end_time}`, 'DD/MM/YYYY-hh:mm')
+        const inp = document.querySelector(`#text-input-title-input`);
 
-        const data = { title: date.title, type: EventTypes.parseFromString(date.type), start: start, end: end }
+        const data = { title: inp.value, type: EventTypes.parseFromString(date.type), start: start, end: end }
         submit(date.user, date.event, data)
     };
 
@@ -83,7 +87,9 @@ const EventsModeration = ({events, fetch, users, fetchUsers, submit, onDelete}) 
         updateDataByEvent(event);
         setShowModal(true);
     };
-    const handleDelete = (data) => {};
+    const handleDelete = (data) => {
+        onDelete(data)
+    };
     
     const items = Array.from(events).groupByToMap(({user_id}) => { return user_id }).entries();
     const rows = []
@@ -111,11 +117,12 @@ const EventsModeration = ({events, fetch, users, fetchUsers, submit, onDelete}) 
             <Modal.Body>
                 <div className="space-y-3 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
                     <LabledField id="user" title="Пользователь">
-                        <SimpleUser user={data.user} onClick={() => setShowModal(true)}/>
+                        <SimpleUser user={data.user} onClick={() => setUserModal(true)}/>
                     </LabledField>
                     <LabledField id="title" title="Название">
                         <TextInput id="title" key="title-input"
                             label=""
+                            inputId="title-input"
                             value={data.title}
                             onChange={(e) => { updateData('title', e.target.value) }}
                         />

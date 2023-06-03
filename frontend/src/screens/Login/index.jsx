@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Card,  Modal, Label, TextInput, Button } from "flowbite-react";
+import { Card,  Modal, Label,  Button } from "flowbite-react";
 
 import TelegramLoginButton from 'react-telegram-login';
+import TextInput from "../../components/Input";
 
 import FastAPIClient from "../../client";
 import config from "../../config";
@@ -36,13 +37,11 @@ const Login = () => {
     };
 
     const onRegister = () => {
-        client.register(registerForm.name, registerForm.level)
-            .then(() => {
+        const inp = document.querySelector("#text-input-name")
 
-            })
-            .catch(() => {
-
-            });
+        client.register(inp.value, registerForm.level)
+            .then(() => {})
+            .catch(() => {});
     };
 
     return (
@@ -63,14 +62,11 @@ const Login = () => {
                         <div className="mb-2 block">
                             <Label htmlFor="name" value="Ваше имя"/>
                         </div>
-                        <TextInput
-                            id="name"
-                            placeholder="Иван Иванов"
-                            required={true}
-                            inputMode="text"
+                        <TextInput 
+                            label=""
+                            inputId="name"
                             value={registerForm.name}
-                            
-                            onChange={(e) => setRegisterForm({...registerForm, name: e.target.value })}
+                            onChange={(e) => setRegisterForm({...registerForm, name: e.targer.value})}
                         />
                     </div>
                     <div>
@@ -90,7 +86,7 @@ const Login = () => {
                             </Button.Group>
                         </div>
                     </div>
-                    <div className="w-full">
+                    <div className="w-full flex justify-end">
                         <Button onClick={onRegister}>
                             Отправить заявку
                         </Button>

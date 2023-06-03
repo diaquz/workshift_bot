@@ -36,14 +36,20 @@ const AviableOffersGroup = ({date, offers, onClick}) => {
 };
 
 
-const AviableOffersList = ({offers, events, accept, fetchEvents}) => {
+const AviableOffersList = ({offers, events, accept, fetchOffers, fetchEvents}) => {
     const [modal, setModal] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [page, setPage] = useState(0);
     const items = Array.from(offers).groupByToMap(({workshift}) => { return workshift.start_time }).entries();
     const rows = []
 
     const handleAccept = (id) => {
         accept(selected, id);
+    };
+
+    const handlePageChange = (n) => {
+        setPage(n);
+        fetchOffers(n)
     };
 
     for(let item of items) rows.push(<AviableOffersGroup date={item[0]} offers={item[1]} onClick={(id) => { setSelected(id); setModal(true); }}/>)
@@ -54,7 +60,7 @@ const AviableOffersList = ({offers, events, accept, fetchEvents}) => {
         <Timeline className="lg:mx-32">
             {rows}
         </Timeline>
-        <Pagination currentPage={1} totalPages={100}/>
+        <Pagination currentPage={1} totalPages={100} onPageChange={(n) => handlePageChange(n)}/>
     </>
     );
 };
