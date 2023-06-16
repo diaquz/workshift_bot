@@ -101,6 +101,7 @@ class FastAPIClient {
 
         const data = {
             user_id: user.id,
+            title: time.title,
             start_time: time.start.format(),
             end_time: time.end.format(),
             type: time.type,

@@ -21,11 +21,14 @@ def fetch_feedback(
     user: User = Depends(deps.get_user)
 ) -> dict:
 
-    feedback = repository.feedback.get_many(db)
+    if repository.user.hasPermission(user):
+        feedback = repository.feedback.get_many(db)
 
-    return {
-        "result": feedback
-    }
+        return {
+            "result": feedback
+        }
+    
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
 @router.post("/create")
 def create_feedback(
@@ -34,15 +37,12 @@ def create_feedback(
     user: User = Depends(deps.get_user)
 ):
     data.user_id = user.id
-
     feedback =  repository.feedback.create(db, obj_in=data)
 
     if feedback is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Не удалось создать")
     
-    return {
-        "result": feedback
-    }
+    return feedback
 
 
 @router.post("/delete")

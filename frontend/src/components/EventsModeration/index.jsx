@@ -75,11 +75,11 @@ const EventsModeration = ({events, fetch, users, fetchUsers, submit, onDelete}) 
     };
     
     const onSubmit = () => {
-        const start = moment(`${date.start}-${date.start_time}`, 'DD/MM/YYYY-hh:mm')
-        const end = moment(`${date.end}-${date.end_time}`, 'DD/MM/YYYY-hh:mm')
+        const start = moment(`${data.start}-${data.start_time}`, 'DD/MM/YYYY-hh:mm')
+        const end = moment(`${data.end}-${data.end_time}`, 'DD/MM/YYYY-hh:mm')
         const inp = document.querySelector(`#text-input-title-input`);
 
-        const data = { title: inp.value, type: EventTypes.parseFromString(date.type), start: start, end: end }
+        const submit_data = { title: inp.value, type: EventTypes.parseFromString(date.type), start: start, end: end }
         submit(date.user, date.event, data)
     };
 

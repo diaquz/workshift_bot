@@ -15,7 +15,7 @@ cb_add_user = CallbackData("add_user", "id", "add")
 
 logger = getLogger("Admin")
 
-async def send_new_request(request):
+async def send_new_requests(request):
     with closing(get_db()) as session:
         db = next(session)
 

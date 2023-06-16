@@ -20,6 +20,6 @@ async def send():
             await send_feedback(feedback)
 
 
-def start_shedule():
-    aioschedule.every(5).minute.do(send)
+async def start_shedule(x):
+    aioschedule.every(5).minutes.do(send)
     pass

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session, contains_eager
+from sqlalchemy import select
 
 from app.repository.base import BaseRepository
 from app.model.event import Event, EventType
@@ -31,6 +32,6 @@ class EventRepository(BaseRepository[Event, EventCreate, EventUpdate]):
             .where((Event.end_time >= start_date) & (Event.start_time <= end_date) & (Event.user_id == id))\
             .order_by(Event.start_time)\
             .all()
-        #TODO filter by user id
+
 
 event = EventRepository(Event)

@@ -17,32 +17,49 @@ router = APIRouter()
 
 @router.get("/", status_code=200, response_model=EventList)
 def fetch_user_events(
-    timestamp: float = datetime.utcnow().timestamp(),
-    days: Optional[int] = 7,
-    workshift: bool = False,
+    start: float = datetime.utcnow().timestamp(),
+    end: float = datetime.utcnow().timestamp(),
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
-) -> dict:
-    date = datetime.fromtimestamp(timestamp)
-    end = date + timedelta(days=days) # type: ignore
+):
+    start_date = datetime.fromtimestamp(start)
+    end_date = datetime.fromtimestamp(end)
 
-    if workshift:
-        events = repository.event.get_by_date_and_type(db, user.id, date, end, type=EventType.Workshift)
-    else:
-        events = repository.event.get_for_user(db, id=user.id, start_date=date, end_date=end)
+    events = repository.event.get_for_user(db, user.id, start_date, end_date) #type: ignore
 
-    return {'result': list(events) }
+    return {
+        'result': list(events)
+    }
 
-@router.get('/events', status_code=200, response_model=EventDetailList)
+
+@router.get("/workshift", status_code=200, response_model=EventList)
+def fetch_workshifts(
+    start: float = datetime.utcnow().timestamp(),
+    end: float = datetime.utcnow().timestamp(),
+    db: Session = Depends(deps.get_db),
+    user: User = Depends(deps.get_user)
+):
+    start_date = datetime.fromtimestamp(start)
+    end_date = datetime.fromtimestamp(end)
+
+    events = repository.event.get_by_date_and_type(db, user.id, start_date, end_date, EventType.Workshift) #type: ignore
+
+    return {
+        'result': list(events)
+    }
+
+
+@router.get('/all', status_code=200, response_model=EventDetailList)
 def fetch_events(
     timestamp: float = datetime.utcnow().timestamp(),
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ):
-    date = datetime.fromtimestamp(timestamp)
-    end = date + timedelta(days=1)
-
     if repository.user.hasPermission(user): # type: ignore
+    
+        date = datetime.fromtimestamp(timestamp)
+        end = date + timedelta(days=1)
+
         event = repository.event.get_by_date(db, date, end)
 
         return {
@@ -65,6 +82,7 @@ def create_event(
 
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
+
 @router.post("/edit", status_code=status.HTTP_200_OK, response_model=schemas.Event)
 def edit_event(
     data: schemas.event.EventUpdate,
@@ -82,7 +100,7 @@ def edit_event(
         
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-@router.delete("/delete", status_code=status.HTTP_200_OK)
+@router.post("/delete", status_code=status.HTTP_200_OK)
 def delete_event(
     event_id: int,
     db: Session = Depends(deps.get_db),

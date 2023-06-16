@@ -5,7 +5,7 @@ def format_events(events):
 
     for event in events:
         result += f'*{event.start_time.strftime("%a %d")}'
-        if(event.start_time.day == event.end_time.day):
+        if(event.start_time.day != event.end_time.day):
             result += f' - {event.end_time.strftime("%d")}*'
 
         result += f'\n\t{event.start_time.strftime("%H:%M")} - {event.end_time.strftime("%H:%M")} {event.title}\n'
@@ -43,7 +43,7 @@ def answers_markup(answers, callback):
         event = answer.offer.workshift
         name = f'{event.start_time.strftime("%a %d %H:M")} - {event.end_time.strftime("%H:%M")} {event.title}'
 
-        markup.add(types.InlineKeyboardButton(name, callback_data=callback.new(id=event.id))) # type: ignore
+        markup.add(types.InlineKeyboardButton(name, callback_data=callback.new(id=answer.id))) # type: ignore
         
     return markup
 

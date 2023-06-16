@@ -5,9 +5,11 @@ const SimpleEvent = ({event, children, lg="lg:mx-10", onClick=null}) => {
     const start = moment(event.start_time);
     const end = moment(event.end_time);
 
+
+
     return ( event && (
         <>
-            <div className={`ml-3 ${lg} py-3 rounded-lg ${onClick ? "hover:bg-slate-50" : ""}`}>
+            <div className={`ml-3 ${lg} py-3 rounded-lg ${onClick ? "hover:bg-slate-50" : ""}`} >
                 <div className="flex flex-col text-left">
                     <div className="flex flex-row justify-between md:mx-10">
                         <div className="flex flex-row">

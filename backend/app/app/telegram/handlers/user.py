@@ -134,8 +134,8 @@ async def cmd_offers(message: types.Message):
 
             if offers and len(offers) > 0:
                 markup = offers_markup(offers, select_offer)
-                markup.add(types.InlineKeyboardButton("<", callback_data=next_offers.new(offset=0))) #type: ignore
-                markup.add(types.InlineKeyboardButton("<", callback_data=next_offers.new(offset=10))) #type: ignore
+                markup.add(types.InlineKeyboardButton("Назад", callback_data=next_offers.new(offset=0))) #type: ignore
+                markup.add(types.InlineKeyboardButton("Вперед", callback_data=next_offers.new(offset=10))) #type: ignore
 
                 await message.reply("Выберите предложение", reply_markup=markup)
 
@@ -186,7 +186,7 @@ async def accept_offer_choice(query: types.CallbackQuery, callback_data: dict):
         db = next(session)
 
         user = repository.user.get_by_telegram(db, id=query.from_user.id)
-        offer = repository.offer.get(db, id=callback_data["offer_id"])
+        offer = repository.offer.get(db, id=callback_data["id"])
         event = repository.event.get(db, id=callback_data["event_id"])
 
         if user and offer and event:

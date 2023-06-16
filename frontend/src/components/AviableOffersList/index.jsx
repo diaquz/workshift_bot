@@ -45,6 +45,7 @@ const AviableOffersList = ({offers, events, accept, fetchOffers, fetchEvents}) =
 
     const handleAccept = (id) => {
         accept(selected, id);
+        setModal(false);
     };
 
     const handlePageChange = (n) => {

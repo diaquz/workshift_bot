@@ -11,6 +11,7 @@ from app import schemas
 from app.schemas.answer import AnswerDetailList
 
 from app import repository
+from datetime import datetime, timedelta
 
 import logging
 
@@ -18,26 +19,28 @@ router = APIRouter()
 
 @router.get('/', status_code=status.HTTP_200_OK, response_model=OffersDetailsList)
 def fetch_offers(
+    date: float = datetime.utcnow().timestamp(),
     offset: Optional[int] = 0,
     limit: Optional[int] = 10,
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ) -> dict:
-    offers = repository.offer.get_by_level(db, level=user.level, id=user.id, offset=offset, limit=limit) # type: ignore
+    min_date = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    start_date = max(datetime.fromtimestamp(date), min_date)
+    offers = repository.offer.get_by_level(db, date=start_date, level=user.level, id=user.id, offset=offset, limit=limit) # type: ignore
     
     return { 'result': list(offers) }
 
 @router.get('/mine', status_code=status.HTTP_200_OK)#, response_model=OfferWithAnswersList)
 def fetch_user_offers(
     db: Session = Depends(deps.get_db),
-    # user: User = Depends(deps.get_user)
+    user: User = Depends(deps.get_user)
 ):
-    offers = repository.offer.get_user_offers(db, id=1) #type: ignore
+    offers = repository.offer.get_user_offers(db, id=user.id) #type: ignore
 
     return {
         'result': list(offers)
     }
-
 
 @router.post("/create", status_code=status.HTTP_201_CREATED, response_model=schemas.Offer)
 def create_offer(
@@ -48,7 +51,7 @@ def create_offer(
     offer = repository.offer.get_by_workshift(db, id)
     event = repository.event.get(db, id=id)
 
-    if offer:
+    if offer is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Already existing')
     
     if event is None or event.type != EventType.Workshift: # type: ignore
@@ -82,8 +85,12 @@ def answer_on_offer(
 ):
     offer = repository.offer.get(db, id=offer_id)
     event = repository.event.get(db, id=event_id)
+    answer = repository.answer.get_by_event_and_offer(db, event_id, offer_id)
 
-    if offer and event and event.type == EventType.Workshift: # type: ignore
+    if answer:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Already existing')
+
+    if offer and event and event.type == EventType.Workshift and event.user_id == user.id: # type: ignore
         obj_in = schemas.AnswerCreate(
             offer_id=offer_id,
             workshift_id=event_id,
@@ -103,6 +110,9 @@ def accept_answer(
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ):
+    answer = repository.answer.get(id)
+    #TODO now any random user can accept other's answers
+
     answer = repository.answer.accept(db, id=id)
     if answer:
         return answer
