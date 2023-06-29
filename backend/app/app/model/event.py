@@ -9,6 +9,7 @@ from enum import IntEnum
 class EventType(IntEnum):
     Workshift = 0
     Illness = 1
+    Global = 2
     Another = 2
 
 
@@ -24,6 +25,7 @@ class Event(Base):
     start_time = Column(DateTime, index=True, default=datetime.utcnow, nullable=False)
     end_time = Column(DateTime, index=True, default=datetime.utcnow, nullable=False)
     type = Column(Enum(EventType), nullable=False)
+    long = Column(Boolean, nullable=False, default=False)
 
     notify = Column(Boolean, default=False, nullable=False)
     # duration = Column(Integer, nullable=False) #maybe timedelta or smt

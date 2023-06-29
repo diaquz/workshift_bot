@@ -3,23 +3,29 @@ from sqlalchemy.orm import Session, joinedload, contains_eager
 from app.repository.base import BaseRepository
 from app.model.offer_answer import Answer
 from app.model.offer import Offer
+from app.model.event import Event
 from app.schemas.answer import AnswerCreate, AnswerUpdate
-from app.schemas.event import EventUpdate, Event
+from app.schemas.event import EventUpdate
 from app import repository
 
+from logging import getLogger
+
+logger = getLogger("answer_rep")
 
 class AnswerRepository(BaseRepository[Answer, AnswerCreate, AnswerUpdate]):
     def get_user_answers(self, db: Session, id: int):
         return db.query(Answer)\
-            .options(joinedload(Answer.workshift), joinedload(Answer.offer).joinedload(Offer.workshift))\
+            .options(joinedload(Answer.workshift), joinedload(Answer.offer).joinedload(Offer.workshift).joinedload(Event.user))\
             .where(Answer.user_id == id)\
             .all()
         
     def accept(self, db: Session, id: int):
         answer = db.query(Answer)\
             .where(Answer.id == id)\
-            .options(joinedload(Answer.offer).joinedload(Offer.workshift), joinedload(Answer.workshift))\
+            .options(joinedload(Answer.workshift), joinedload(Answer.offer).joinedload(Offer.workshift))\
             .first()
+
+        logger.info(f"{answer}")
 
         if answer and answer.offer and answer.workshift and answer.offer.workshift:
             first_upd = { 'user_id': answer.offer.publisher_id }
@@ -29,7 +35,7 @@ class AnswerRepository(BaseRepository[Answer, AnswerCreate, AnswerUpdate]):
             repository.event.update(db, db_obj=answer.offer.workshift, obj_in=second_upd)
 
             deleted_offer = repository.offer.remove(db, id=answer.offer.id)
-            deleted_answer = repository.answer.remove(db, id=answer.id)
+            # deleted_answer = repository.answer.remove(db, id=answer.id)
         
         return answer
 

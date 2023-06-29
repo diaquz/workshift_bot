@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 from app.model.user import Qualification
+from app.schemas.telegram import TelegramAuthRequest
 
 class RequestBase(BaseModel):
     name: str
@@ -26,4 +27,9 @@ class Request(RequestInDbBase):
 
 class RequestList(BaseModel):
     result: list[Request]
+    
+
+class SiteRequest(BaseModel):
+    request: RequestCreate
+    token: TelegramAuthRequest
     

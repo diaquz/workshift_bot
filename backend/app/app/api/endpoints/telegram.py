@@ -9,17 +9,19 @@ from app.model.user import User
 from app import schemas
 from app.schemas.user import UserList
 
+from app.telegram.resolver import resolver
+
 router = APIRouter()
 
-
-def entry_point(
-    data: dict,
+@router.post('', status_code=status.HTTP_200_OK)
+async def entry_point(
+    update: dict,
     db: Session = Depends(deps.get_db)
 ):
-    id = 0
-    user = repository.user.get_by_telegram(db, id)
-
-    if user:
+    try:
+        await resolver.resolve(db, update)
+    except:
         pass
+            
 
-    pass
+    

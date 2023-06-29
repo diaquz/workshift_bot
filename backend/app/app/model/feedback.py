@@ -12,6 +12,7 @@ class Feedback(Base):
 
     title = Column(String(256), nullable=False)
     message = Column(String(256), nullable=False)
+    in_work = Column(Boolean, nullable=False)
 
     user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     user = relationship("User", back_populates="feedbacks")

@@ -17,5 +17,10 @@ class FeedbackRepository(BaseRepository[Feedback, FeedbackCreate, FeedbackUpdate
     def get_by_timetamp(self, db: Session, timestamp: float):
         return db.query(Feedback).where(Feedback.timestamp >= timestamp).options(joinedload(Feedback.user)).all()
     
+    def in_work(self, db: Session, feedback):
+        update = { 'in_work': True }
+
+        return self.update(db, db_obj=feedback, obj_in=update)
+    
     
 feedback = FeedbackRepository(Feedback)

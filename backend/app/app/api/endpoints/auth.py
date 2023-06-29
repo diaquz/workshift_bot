@@ -4,7 +4,7 @@ from typing import Optional
 
 from app.api import deps
 from app.schemas.telegram import TelegramAuthRequest
-from app.schemas.request import RequestCreate, RequestList
+from app.schemas.request import RequestCreate, RequestList, SiteRequest
 from app import schemas
 
 from app.model.user import PrivilegeLevel
@@ -37,11 +37,13 @@ def telegram_login(*,
 
 
 @router.post("/register", status_code=200)
-def register(*,
-    token: TelegramAuthRequest,
-    data: RequestCreate,
+def register(
+    request: SiteRequest,
     db: Session = Depends(deps.get_db)
 ):
+    token = request.token
+    data = request.request
+    
     if verify_telegram(token):
         tg_id = int(token.id)
         request = repository.request.get_by_telegram(db, tg_id)

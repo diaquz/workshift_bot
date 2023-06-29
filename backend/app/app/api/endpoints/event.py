@@ -5,7 +5,7 @@ from typing import Optional
 from datetime import datetime, timedelta
 
 from app.api import deps
-from app.schemas.event import EventList, EventDetailList
+from app.schemas.event import EventList, EventDetailList, MutlipleEventCreate
 from app.model.event import EventType
 from app import schemas
 from app import repository
@@ -81,6 +81,25 @@ def create_event(
         return event
 
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
+@router.post("/create/many", status_code=status.HTTP_200_OK)
+def create_many_event(
+    data: MutlipleEventCreate,
+    db: Session = Depends(deps.get_db),
+    user: User = Depends(deps.get_user) 
+):
+    result = []
+    obj_in = data.data
+
+    for user_id in data.users:
+        user_ = repository.event.get(db, id=user_id)
+        if user_:
+            obj_in.user_id = user_id
+
+            event = repository.event.create(db, obj_in=obj_in)
+            result.append((event is not None))
+
+    return { 'result': result }        
 
 
 @router.post("/edit", status_code=status.HTTP_200_OK, response_model=schemas.Event)

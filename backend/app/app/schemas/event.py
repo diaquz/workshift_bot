@@ -11,6 +11,7 @@ class EventBase(BaseModel):
     title: str
     start_time: datetime
     end_time: datetime
+    long: bool
 
     type: EventType
     notify: bool
@@ -21,6 +22,10 @@ class EventCreate(EventBase):
 class EventUpdate(EventBase):
     id: int
     ...
+
+class MutlipleEventCreate(BaseModel):
+    data: EventCreate
+    users: list[int]
 
 class EventInDbBase(EventBase):
     id: Optional[int]

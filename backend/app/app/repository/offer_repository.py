@@ -23,7 +23,7 @@ class OfferRepository(BaseRepository[Offer, OfferCreate, OfferUpdate]):
     def get_user_offers(self, db: Session, id: int):
         return db.query(Offer)\
             .join(Event)\
-            .options(joinedload(Offer.answers).joinedload(Answer.workshift), contains_eager(Offer.workshift))\
+            .options(joinedload(Offer.answers).joinedload(Answer.workshift).joinedload(Event.user), contains_eager(Offer.workshift))\
             .where(Offer.publisher_id == id)\
             .order_by(Event.start_time)\
             .all()

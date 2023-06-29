@@ -7,7 +7,7 @@ from app import repository
 
 from app.model.user import User
 from app import schemas
-from app.schemas.user import UserList
+from app.schemas.user import UserList, UserUpdate
 
 router = APIRouter()
 
@@ -21,8 +21,8 @@ def get_current_user(
 def fetch_users(
     offset: Optional[int] = 0,
     limit: Optional[int] = 10,
-    db: Session = Depends(deps.get_db)
-    # user: User = Depends(deps.get_user)
+    db: Session = Depends(deps.get_db),
+    user: User = Depends(deps.get_user)
 ):
     users = repository.user.get_many(db, offset=offset, limit=limit) # type: ignore
     return {
@@ -56,5 +56,18 @@ def delete_user(
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")   
 
 
-def edit_user():
-    pass
+@router.post('/edit', status_code=status.HTTP_200_OK)
+def edit_user(
+    data: UserUpdate,
+    db: Session = Depends(deps.get_db),
+    user: User = Depends(deps.get_user)
+):
+    if repository.user.hasPermission(user):
+        obj = repository.user.get(db, id=data.id)
+
+        if obj:
+            updated_user = repository.user.update(db, db_obj=obj, obj_in=data)
+
+            return updated_user
+        
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)

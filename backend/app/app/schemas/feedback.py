@@ -9,6 +9,7 @@ class FeedbackBase(BaseModel):
 
     title: str
     message: str
+    in_work: bool
 
 
 class FeedbackCreate(FeedbackBase):

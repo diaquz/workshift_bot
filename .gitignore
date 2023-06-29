@@ -3,6 +3,7 @@ app/config.py
 venv/
 node_modules/
 app/frontend/build
+**/old_frontend/
 
 *.pyc
 config.py

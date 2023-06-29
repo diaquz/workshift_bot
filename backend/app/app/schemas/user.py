@@ -10,10 +10,10 @@ class UserBase(BaseModel):
     privilage: PrivilegeLevel
 
 class UserCreate(UserBase):
-    picture: Optional[str]
+    ...
 
 class UserUpdate(UserBase):
-    ...
+    id: int
 
 class UserInDbBase(UserBase):
     id: Optional[int] = None

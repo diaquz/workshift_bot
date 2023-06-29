@@ -47,6 +47,7 @@ def upgrade() -> None:
     sa.Column('end_time', sa.DateTime(), nullable=False),
     sa.Column('type', sa.Enum('Workshift', 'Illness', 'Another', name='eventtype'), nullable=False),
     sa.Column('notify', sa.Boolean(), nullable=False),
+    sa.Column('long', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -81,6 +82,7 @@ def upgrade() -> None:
     sa.Column('message', sa.String(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.Float(), nullable=True),
+    sa.Column('in_work', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

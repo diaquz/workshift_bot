@@ -104,22 +104,22 @@ def answer_on_offer(
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
 
-@router.post("answer/accept", status_code=status.HTTP_200_OK)
+@router.post("/answer/accept", status_code=status.HTTP_200_OK)
 def accept_answer(
     id: int,
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ):
-    answer = repository.answer.get(id)
-    #TODO now any random user can accept other's answers
-
+    answer = repository.answer.get(db, id=id)
+    #TODO now any random user can accept om,ther's answers
     answer = repository.answer.accept(db, id=id)
+
     if answer:
-        return answer
+        return "success"
         
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     
-@router.post("answer/delete", status_code=status.HTTP_200_OK)
+@router.post("/answer/delete", status_code=status.HTTP_200_OK)
 def delete_answer(
     id: int,
     db: Session = Depends(deps.get_db),
@@ -131,12 +131,12 @@ def delete_answer(
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-@router.post("answer/me", status_code=status.HTTP_200_OK)
+@router.get("/answer/me", status_code=status.HTTP_200_OK)
 def fethc_user_answers(
     db: Session = Depends(deps.get_db),
     user: User = Depends(deps.get_user)
 ):
-    answers = repository.answer.get_user_answers(db, user.id)
+    answers = repository.answer.get_user_answers(db, user.id) #type: ignore
 
     return {
         "result": list(answers)

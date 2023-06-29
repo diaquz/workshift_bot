@@ -23,7 +23,7 @@ class EventRepository(BaseRepository[Event, EventCreate, EventUpdate]):
             .filter((Event.type == type) & (Event.end_time >= start_date) & (Event.start_time <= end_date) & (Event.user_id == id))\
             .join(User)\
             .options(contains_eager(Event.user))\
-            .order_by(Event.user_id)\
+            .order_by(Event.start_time)\
             .all()
     
 
